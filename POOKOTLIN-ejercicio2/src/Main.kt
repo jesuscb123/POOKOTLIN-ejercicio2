@@ -15,14 +15,29 @@ En el main(), crear 3 personas diferentes (la primera sin nombre) utilizando el 
 Sobre la persona 1: Modificar su nombre y para ello debes solicitarlo al usuario por consola. No puede ser nulo o vacio. Mostrar por consola sólo el nombre, peso y altura. Sobre la persona 3: Mostrar el peso, altura y imc. Modificar la altura, por ejemplo a 1.80 Mostrar el peso, altura y imc. Sobre la persona 2: Modificar la altura para que tenga el mismo valor que la persona 3. Mostrar la persona 2 y persona 3. Comparar si las dos personas son iguales, y mostrar el resultado. Implementa el método equals():boolean (Pulsa Ctrl+o). Ejecutar la comparación.
  */
 
+/*
+fun comprobar_personas_iguales(persona1: Persona, persona2: Persona){
+    if(persona1 == persona2){
+        println("Las dos personas son iguales")
+    }else{
+        println("Las dos personas no son iguales")
+    }
+}
+*
+ */
+fun mostrar_personas(persona1: Persona, persona2: Persona, persona3: Persona, modificacion: Boolean){
+    if(!modificacion){
+        println(persona1)
+        println(persona2)
+        println("$persona3, ${persona3.calcular_imc()}")
+    }else{
+        println(persona1)
+        println("$persona3, ${persona3.calcular_imc()}")
+        println("$persona2,${persona2.calcular_imc()}")
+        persona2.equals(persona3)
 
+    }
 
-
-
-fun mostrar_personas(persona1: Persona, persona2: Persona, persona3: Persona){
-    println("$persona1, ${persona1.calcular_imc()}")
-    println("$persona2, ${persona2.calcular_imc()}")
-    println("$persona3, ${persona3.calcular_imc()}")
 }
 
 fun mostrar_error(msj: String){
@@ -66,11 +81,15 @@ fun main(){
     var persona1 = Persona(peso = 55F, altura = 1.20F)
     var persona2 = Persona(nombre = "Juan", peso = 70F, altura = 1.75F)
     var persona3 = Persona(nombre = "María", peso = 90F, altura = 1.80F)
-    mostrar_personas(persona1,persona2,persona3)
-    modificar_propiedades(persona1,persona2,persona3)
-    
 
-    mostrar_personas(persona1,persona2,persona3)
+    mostrar_personas(persona1,persona2,persona3, modificacion = false)
+
+    modificar_propiedades(persona1,persona2,persona3)
+
+
+    mostrar_personas(persona1,persona2,persona3, modificacion = true)
+
+
 
 
 }
