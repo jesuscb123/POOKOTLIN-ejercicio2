@@ -1,30 +1,43 @@
+import kotlin.math.pow
 
-
-
-/*
-Crear una clase Persona que tenga nombre, peso (en kg con decimales), altura (en metros con decimales) y su imc.
-
-Crear un constructor primario con todos los atributos, excepto nombre e imc. Este último atributo se calcula en función del peso y la altura. Por tanto no se debe poder modificar, pero si consultar.
-
-Crear un constructor secundario que también incluya el nombre de la persona cómo parámetro.
-
-Implementa el método toString, representación del objeto en forma de String: override fun toString() = "". (Pulsa Ctrl+o)
-
-En el main(), crear 3 personas diferentes (la primera sin nombre) utilizando el constructor primario y secundario. Después mostrarlas por consola y a continuación, realizar lo siguiente:
-
-Sobre la persona 1: Modificar su nombre y para ello debes solicitarlo al usuario por consola. No puede ser nulo o vacio. Mostrar por consola sólo el nombre, peso y altura. Sobre la persona 3: Mostrar el peso, altura y imc. Modificar la altura, por ejemplo a 1.80 Mostrar el peso, altura y imc. Sobre la persona 2: Modificar la altura para que tenga el mismo valor que la persona 3. Mostrar la persona 2 y persona 3. Comparar si las dos personas son iguales, y mostrar el resultado. Implementa el método equals():boolean (Pulsa Ctrl+o). Ejecutar la comparación.
- */
-
-/*
-fun comprobar_personas_iguales(persona1: Persona, persona2: Persona){
-    if(persona1 == persona2){
-        println("Las dos personas son iguales")
-    }else{
-        println("Las dos personas no son iguales")
+class Persona(var peso: Float, var altura: Float) {
+    var nombre: String = ""
+        get() = field
+        set(value){
+            require(value.isNotEmpty()) {"El nombre no puede estar vacío"}
+            field = value
+        }
+    constructor(nombre: String, peso: Float, altura: Float) : this(peso,altura){
+        this.nombre = nombre
     }
+
+    override fun equals(other: Any?): Boolean {
+        if(this === other) return true
+        if (other !is Persona) return false
+        return nombre == other.nombre && altura == other.altura
+    }
+
+    override fun hashCode(): Int {
+        return 31 * nombre.hashCode() + peso.hashCode() + altura.hashCode()
+    }
+
+    fun calcular_imc(): Float{
+        val imc = peso * altura.pow(2)
+        return imc
+    }
+
+    override fun toString(): String {
+        return "Persona: $nombre, peso: $peso, altura: $altura"
+    }
+
+
 }
-*
- */
+
+
+
+
+
+
 fun mostrar_personas(persona1: Persona, persona2: Persona, persona3: Persona, modificacion: Boolean){
     if(!modificacion){
         println(persona1)
@@ -34,7 +47,11 @@ fun mostrar_personas(persona1: Persona, persona2: Persona, persona3: Persona, mo
         println(persona1)
         println("$persona3, ${persona3.calcular_imc()}")
         println("$persona2,${persona2.calcular_imc()}")
-        persona2.equals(persona3)
+        if(persona1 == persona2){
+            println("Son iguales")
+        }else{
+            println("No son iguales")
+        }
 
     }
 
@@ -44,26 +61,16 @@ fun mostrar_error(msj: String){
     println(msj)
 }
 
-fun comprobar_nombre_correcto(nombre: String): Boolean{
-    if(nombre == ""){
-        return false
-    }
-    return true
-}
 
-fun pedir_nombre(msj: String): String{
+fun pedir_nombre(persona: Persona,msj: String): String{
     var nombre_correcto = false
     var nombre = ""
     while(!nombre_correcto){
         try {
             println(msj)
             nombre = readln()
-            if(!comprobar_nombre_correcto(nombre)) {
-                throw IllegalArgumentException("**Error** el nombre no puede estar vacío.")
-            }else{
-                nombre_correcto = true
-            }
-
+            persona.nombre = nombre
+            nombre_correcto = true
         }catch(e: IllegalArgumentException){
             mostrar_error("$e")
         }
@@ -72,7 +79,7 @@ fun pedir_nombre(msj: String): String{
 }
 
 fun modificar_propiedades(persona1: Persona,persona2: Persona,persona3: Persona){
-    persona1.nombre = pedir_nombre("Introduce un nombre para la persona1, no puede estar vacío.")
+    persona1.nombre = pedir_nombre(persona1,"Introduce un nombre para la persona1, no puede estar vacío.")
     persona3.altura = 1.90F
     persona2.altura = persona3.altura
 }
@@ -88,8 +95,6 @@ fun main(){
 
 
     mostrar_personas(persona1,persona2,persona3, modificacion = true)
-
-
 
 
 }
